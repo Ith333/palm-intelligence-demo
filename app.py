@@ -12,33 +12,31 @@ except Exception as e:
     st.error("⚠️ Erreur : La clé API n'est pas configurée dans les Secrets Streamlit.")
     st.stop()
 
-# --- 2. BARRE DE DIAGNOSTIC (POUR NOUS, LES INGÉNIEURS) ---
+# --- 2. BARRE DE DIAGNOSTIC ---
 with st.sidebar:
     st.header("🛠️ Diagnostic Système")
     try:
         import google.generativeai as pkg
         st.write(f"**Version SDK GenAI :** {pkg.__version__}")
         
-        # On demande à Google quels modèles sont réellement disponibles
         models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        
         st.write("**Modèles détectés par la clé :**")
-        st.dataframe(models) # Affiche la liste propre
+        st.dataframe(models) 
         
-        # Sélection intelligente du modèle
-        best_model = "gemini-1.5-flash" # Valeur par défaut
-        if "models/gemini-1.5-flash" in models:
+        # --- LA MODIFICATION EST ICI : ON CIBLE LA GÉNÉRATION 2.5 ---
+        best_model = "gemini-2.5-flash" # Fallback par défaut
+        if "models/gemini-2.5-flash" in models:
+            best_model = "gemini-2.5-flash"
+        elif "models/gemini-2.0-flash" in models:
+            best_model = "gemini-2.0-flash"
+        elif "models/gemini-1.5-flash" in models:
             best_model = "gemini-1.5-flash"
-        elif "models/gemini-1.5-pro-latest" in models:
-            best_model = "gemini-1.5-pro-latest"
-        elif "models/gemini-pro-vision" in models:
-            best_model = "gemini-pro-vision"
             
         st.success(f"**Modèle sélectionné :** {best_model}")
             
     except Exception as e:
         st.error(f"Erreur de diagnostic: {e}")
-        best_model = "gemini-1.5-flash" # Fallback
+        best_model = "gemini-2.5-flash" 
 
 # --- 3. INTERFACE PRINCIPALE ---
 st.title("🌿 PALM-INTELLIGENCE")
@@ -74,7 +72,6 @@ if uploaded_file is not None:
                 """
                 
                 try:
-                    # Initialisation du modèle choisi dynamiquement
                     model = genai.GenerativeModel(best_model)
                     response = model.generate_content([prompt, img])
                     
