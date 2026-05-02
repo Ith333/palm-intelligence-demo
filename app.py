@@ -80,7 +80,7 @@ if uploaded_file is not None:
                     
                 except Exception as e:
                     st.error(f"Erreur IA détaillée : {e}")
-        # Code à ajouter tout à la fin de app.py
+       # Code à ajouter tout à la fin de app.py
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -88,4 +88,4 @@ hide_st_style = """
             header {visibility: hidden;}
             </style>
             """
-st.markdown(hide_st_style, unsafe_allow_view_content=True)            
+st.markdown(hide_st_style, unsafe_allow_view_content=True)
