@@ -6,7 +6,7 @@ import google.generativeai as genai
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # Initialisation du modèle IA
-model = genai.GenerativeModel('gemini-pro-vision')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Interface utilisateur
 st.set_page_config(page_title="PALM-INTELLIGENCE", layout="wide", page_icon="🌿")
